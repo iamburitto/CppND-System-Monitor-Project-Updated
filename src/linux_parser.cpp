@@ -67,10 +67,37 @@ vector<int> LinuxParser::Pids() {
 }
 
 // TODO: Read and return the system memory utilization
-float LinuxParser::MemoryUtilization() { return 0.0; }
+float LinuxParser::MemoryUtilization() {
+
+  return 0.0;
+}
 
 // TODO: Read and return the system uptime
-long LinuxParser::UpTime() { return 0; }
+long int LinuxParser::UpTime() {
+    long int uptime;
+    unsigned int uptime_fractional;
+    string line;
+    std::ifstream stream(kProcDirectory + kUptimeFilename);
+    if (stream.is_open())
+    {
+        std::getline(stream, line);
+        std::replace(line.begin(), line.end(), '.', ' ');
+        std::istringstream linestream(line);
+        linestream >> uptime >> uptime_fractional;
+    }
+
+    // Convert into DD:HH:MM:SS
+    unsigned int days = uptime/60/60/24;
+    unsigned int hours = uptime/60/60%24;
+    unsigned int minutes = uptime/60%60;
+    unsigned int seconds = uptime%60;
+    unsigned int milliseconds = uptime_fractional;
+    std::stringstream buffer;
+    buffer << std::setw(2) << days << ":" << hours << ":" << minutes << ":" << seconds << "." << milliseconds;
+    std::cout << buffer.str() << std::endl;
+
+    return uptime;
+}
 
 // TODO: Read and return the number of jiffies for the system
 long LinuxParser::Jiffies() { return 0; }
@@ -112,4 +139,4 @@ string LinuxParser::User(int pid[[maybe_unused]]) { return string(); }
 
 // TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
-long LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
+long int LinuxParser::UpTime(int pid[[maybe_unused]]) { return 0; }
