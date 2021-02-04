@@ -86,16 +86,6 @@ long int LinuxParser::UpTime() {
         linestream >> uptime >> uptime_fractional;
     }
 
-    // Convert into DD:HH:MM:SS
-    unsigned int days = uptime/60/60/24;
-    unsigned int hours = uptime/60/60%24;
-    unsigned int minutes = uptime/60%60;
-    unsigned int seconds = uptime%60;
-    unsigned int milliseconds = uptime_fractional;
-    std::stringstream buffer;
-    buffer << std::setw(2) << days << ":" << hours << ":" << minutes << ":" << seconds << "." << milliseconds;
-    std::cout << buffer.str() << std::endl;
-
     return uptime;
 }
 
